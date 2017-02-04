@@ -19,7 +19,7 @@ or
 java -jar target/restcron-jar-with-dependencies.jar 
 ```
 
-# Swagger
+## Swagger
 
 You can open swagger-ui on your browser 
 
