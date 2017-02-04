@@ -1,7 +1,8 @@
-package github.rodolfodpk.restcron;
+package github.rodolfodpk.restcron.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.rodolfodpk.restcron.routes.GetRoute;
+import github.rodolfodpk.restcron.JobRepresentation;
+import github.rodolfodpk.restcron.RestCronApiClient;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
