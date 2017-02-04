@@ -7,12 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import org.apache.camel.impl.DefaultCamelContext;
 import static org.assertj.core.api.StrictAssertions.assertThat;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.runners.MockitoJUnitRunner;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -86,18 +87,6 @@ public class PostRouteTest {
     assertThat(response.code()).isEqualTo(400);
     assertThat(jobs.size()).isEqualTo(0);
     verifyNoMoreInteractions(jobSideEffect);
-  }
-
-  @Test
-  @Ignore // because Crontab precision is minutes, not seconds
-  public void a_scheduled_job_should_call_side_effect() throws Exception {
-    JobRepresentation job = new JobRepresentation("job1", "hi from job1", "0/1 * * * * ?");
-    Call<Void> call =  apiClient.postJobs(job);
-    Response<Void> response = call.execute();
-    Thread.sleep(2000); // just to give some time in order to check if scheduling is working
-    assertThat(response.code()).isEqualTo(201);
-    assertThat(jobs.get(job.getName())).isEqualTo(job);
-    verify(jobSideEffect, atLeast(1)).accept(eq(job), any(LocalDateTime.class));
   }
 
 }
