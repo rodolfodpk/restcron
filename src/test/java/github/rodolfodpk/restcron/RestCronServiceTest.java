@@ -28,7 +28,7 @@ public class RestCronServiceTest {
     assertThat(isPortOpen("localhost", 8080)).isFalse();
   }
 
-  boolean isPortOpen(String host, int port) {;
+  boolean isPortOpen(String host, int port) {
     try {
       new Socket(host, port);
       return true;
