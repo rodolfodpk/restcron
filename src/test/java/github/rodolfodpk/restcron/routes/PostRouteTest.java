@@ -91,8 +91,4 @@ public class PostRouteTest {
 
 }
 
-// segundo problema deve ser um outro projeto com kotlin gerando javascript
-// https://kotlinlang.org/docs/tutorials/javascript/getting-started-maven/getting-started-with-maven.html
-// usar isto para iterar as tuplas https://kotlinlang.org/docs/reference/multi-declarations.html
-
 

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -39,22 +40,19 @@ public class RestCronService {
     context.stop();
   }
 
-  private void start(DefaultCamelContext context, List<RouteBuilder> routes) throws Exception {
+  public void start(DefaultCamelContext context, List<RouteBuilder> routes) throws Exception {
 
-    routes.forEach(route -> {
-      try {
-        context.addRoutes(route);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    });
+    AtomicReference<Exception> exception = new AtomicReference<>();
+
+    for (RouteBuilder route: routes) {
+      context.addRoutes(route);
+    }
 
     final Main main = new Main();
     main.getCamelContexts().clear();
     main.getCamelContexts().add(context);
     main.run();
   }
-
 
 }
 
