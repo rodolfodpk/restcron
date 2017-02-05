@@ -3,11 +3,8 @@ package github.rodolfodpk.restcron;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import org.apache.camel.impl.DefaultCamelContext;
 import static org.assertj.core.api.StrictAssertions.assertThat;
 import org.junit.Test;
@@ -38,11 +35,6 @@ public class RestCronServiceTest {
   public void starting_with_invalid_route_should_fail() throws Exception {
 
     final DefaultCamelContext context = new DefaultCamelContext();
-    final ConcurrentHashMap<String, JobRepresentation> jobs = new ConcurrentHashMap<>();
-
-    final BiConsumer<JobRepresentation, LocalDateTime> jobSideEffect =
-            (jobRepresentation, localDateTime) -> System.out.println(jobRepresentation.getMsg()
-                    + " at " + localDateTime);
 
     assertThat(isPortOpen("localhost", 8080)).isFalse();
     RestCronService service = new RestCronService();
