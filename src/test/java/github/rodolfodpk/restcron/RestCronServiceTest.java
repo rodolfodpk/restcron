@@ -3,8 +3,10 @@ package github.rodolfodpk.restcron;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import static org.assertj.core.api.StrictAssertions.assertThat;
 import org.junit.Test;
@@ -14,35 +16,47 @@ import org.junit.Test;
  */
 public class RestCronServiceTest {
 
+
   @Test
   public void it_should_start_and_stop() throws Exception {
 
     assertThat(isPortOpen("localhost", 8080)).isFalse();
+
     new Thread(() -> {
       try {
-        RestCronService.main(null);
+        RestCronService.main();
       } catch (Exception e) {
         e.printStackTrace();
       }
     }).start();
     Thread.sleep(3000);
     assertThat(isPortOpen("localhost", 8080)).isTrue();
-    RestCronService.stop();
+    RestCronService.serviceInstance.stop();
     assertThat(isPortOpen("localhost", 8080)).isFalse();
   }
 
   @Test
   public void starting_with_invalid_route_should_fail() throws Exception {
 
+
     final DefaultCamelContext context = new DefaultCamelContext();
 
     assertThat(isPortOpen("localhost", 8080)).isFalse();
-    RestCronService service = new RestCronService();
+
+    final List<RouteBuilder> routes = Collections.singletonList(new RouteBuilder() {
+      @Override
+      public void configure() throws Exception {
+        throw new Exception();
+      }
+    }); // an invalid route
+
+    final RestCronService service = new RestCronService(context, routes);
+
     AtomicReference<Exception> exception = new AtomicReference<>();
 
     new Thread(() -> {
       try {
-          service.start(context, Arrays.asList(null));
+          service.start();
       } catch (Exception e) {
         exception.set(e);
       }
