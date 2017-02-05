@@ -17,4 +17,4 @@ install:
   https://raw.githubusercontent.com/rodolfodpk/restcron/master/settings.xml
 - mvn dependency:go-offline
 script:
-- mvn clean install site
+- mvn clean install 
