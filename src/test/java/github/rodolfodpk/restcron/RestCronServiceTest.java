@@ -5,15 +5,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.StrictAssertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import org.junit.Test;
 
-/**
- * This test may eventually fail on some machines since it uses Thread.sleep
- */
 public class RestCronServiceTest {
 
 
@@ -29,8 +29,9 @@ public class RestCronServiceTest {
         e.printStackTrace();
       }
     }).start();
-    Thread.sleep(3000);
-    assertThat(isPortOpen("localhost", 8080)).isTrue();
+
+    await().atMost(5, SECONDS).until(() -> Assertions.assertThat(isPortOpen("localhost", 8080)).isTrue());
+
     RestCronService.serviceInstance.stop();
     assertThat(isPortOpen("localhost", 8080)).isFalse();
   }
